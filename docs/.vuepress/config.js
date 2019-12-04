@@ -8,29 +8,21 @@ module.exports = {
     nav: [
       { text: 'Home', link: '/' },
       { text: 'react源码解析', link: '/react源码解析/' },
+      { text: 'javaScript', link: '/javaScript/' }
     ],
-    // sidebar: [
-    //   {
-    //     title: 'react源码解析', // 侧边栏名称
-    //     collapsable: true, // 可折叠
-    //     children: [
-    //       '/react源码解析/', // 你的md文件地址
-    //     ]
-    //   },
-    //   {
-    //     title: 'CSS', 
-    //     collapsable: true,
-    //     children: [
-    //       '/blog/CSS/搞懂Z-index的所有细节',
-    //     ]
-    //   },
-    //   {
-    //     title: 'HTTP',
-    //     collapsable: true,
-    //     children: [
-    //       '/blog/HTTP/认识HTTP-Cookie和Session篇',
-    //     ]
-    //   },
-    // ]
+    sidebar: {
+      '/react源码解析/': [
+        '',
+        'CREATEELEMENT'
+      ],
+      '/javaScript/': [
+        '',
+        'PROPTYPE'
+      ],
+      // '/css/': [
+      //   'three',
+      //   'four'
+      // ]
+    }
   },
 }
