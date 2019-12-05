@@ -12,17 +12,17 @@ render() {
 ```
 如上是一段最简单的react代码，也是最简单的jsx语法，实际上这段代码会编译成这样一种形式的对象
 ```
-{
     type: 'div',
-        props: {
-        className: 'danger'
+    {
+      className: 'danger'
     },
     children: [
         '111'
     ]
-}
 ```
-jsx编译成上述对象的过程实际上Babel编译成React.createElement的过程，(之前react官方有相应的编译轮子，但是后面更多的是在使用Babel进行编译，react官方页没有再维护该轮子)
+jsx会将html语法直接加入到js，再由翻译器转换成春js后由浏览器执行。React官方之前开发过一套轮子JSTransform来完成这个工作。但是现在已经全部用Babel的jsx编译器来实现了，而JSTransform这个轮子已经不再维护。
+
+而Babel将jsx语法编译成这个形式后会将这个结果作为参数传递给React.createElement方法,react.CreateElement方法源码如下(加了一些注释)
 ```
 export function createElement(type, config, children) {
   let propName;
@@ -116,3 +116,78 @@ export function createElement(type, config, children) {
   );
 }
 ```
+createElement所做的事情如下
+
+1、处理config即我们所传递的ref、id、className等
+
+2、处理子元素
+
+3、处理默认值
+
+经过上述处理后会得到几个值type、key等这些值等含义应该不难理解,得到这几个值后会把这些值作为参数传递给 ReactElement方法，这个世纪上也只是一个工厂函数，源码如下
+```
+const ReactElement = function (type, key, ref, self, source, owner, props) {
+  const element = {
+    // This tag allows us to uniquely identify this as a React Element
+    $$typeof: REACT_ELEMENT_TYPE,
+
+    // Built-in properties that belong on the element
+    type: type,
+    key: key,
+    ref: ref,
+    props: props,
+
+    // Record the component responsible for creating this element.
+    _owner: owner,
+  };
+
+  if (__DEV__) {
+    // The validation flag is currently mutative. We put it on
+    // an external backing store so that we can freeze the whole object.
+    // This can be replaced with a WeakMap once they are implemented in
+    // commonly used development environments.
+    element._store = {};
+
+    // To make comparing ReactElements easier for testing purposes, we make
+    // the validation flag non-enumerable (where possible, which should
+    // include every environment we run tests in), so the test framework
+    // ignores it.
+
+    //为了使ReactElement的比较更容易进行测试，我们使
+    //验证标志不可枚举（在可能的情况下，应
+    //包括我们在其中运行测试的所有环境），因此测试框架
+    //忽略它。
+    Object.defineProperty(element._store, 'validated', {
+      configurable: false,
+      enumerable: false,
+      writable: true,
+      value: false,
+    });
+    // self and source are DEV only properties.
+    Object.defineProperty(element, '_self', {
+      configurable: false,
+      enumerable: false,
+      writable: false,
+      value: self,
+    });
+    // Two elements created in two different places should be considered
+    // equal for testing purposes and therefore we hide it from enumeration.
+    //应该考虑在两个不同位置创建的两个元素
+    //出于测试目的是相等的，因此我们将其从枚举中隐藏起来。
+    Object.defineProperty(element, '_source', {
+      configurable: false,
+      enumerable: false,
+      writable: false,
+      value: source,
+    });
+    if (Object.freeze) {
+      Object.freeze(element.props);
+      Object.freeze(element);
+    }
+  }
+
+  return element;
+};
+```
+只是返回了一个element对象，至于if (__DEV__)中等代码其实可以忽略可以理解为为了防止开发人员对element对象做一些不规范或者可能导致错误的操作。
+分析下来，react.createElement只是根据jsx语法编译后产生的参数返回了一个element对象
