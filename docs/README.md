@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage: /bg9.jpg
-actionText: 快速上手 →
+actionText: 小二，上酒 →
 actionLink: /react源码解析/
 # features:
 # - title: 简洁至上
