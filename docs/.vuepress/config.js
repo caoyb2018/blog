@@ -8,7 +8,10 @@ module.exports = {
     nav: [
       { text: 'Home', link: '/' },
       { text: 'react源码解析', link: '/react源码解析/' },
-      { text: 'javaScript', link: '/javaScript/' }
+      { text: 'javaScript', link: '/javaScript/' },
+      { text: '数据结构与算法', link: '/dataStructureAndAlgorithm/'},
+      { text: '设计模式', link: '/DesignPattern/' },
+      { text: '前端性能优化', link: '/performanceOptimization/' }
     ],
     sidebar: {
       '/react源码解析/': [

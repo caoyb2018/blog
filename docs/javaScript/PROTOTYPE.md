@@ -72,5 +72,48 @@ String.__proto__ === Number.__proto__ === Boolean.__proto__ === Array.__proto__ 
 似乎有些难以理解，可以点击链接[JavaScript 世界万物诞生记](https://zhuanlan.zhihu.com/p/22989691)
 这种剧场版的其实理解起来还是比较容易的，虽然会有点绕
 
+## new
+明白了原型对象和原型链之后那么js在new的时候会做啥
+
+换句话说。如果没有new，js要怎样才能实现继承呢
+
+```
+function Person(name) {
+    this.name = name;
+    this.run = function(){
+        console.log('run')
+    }
+}
+
+Person.prototype = {
+    say(){
+        console.log(`my name is ${this.name}`)
+    }
+}
+
+let obj = {}
+
+obj.__proto__ = Person.prototype
+Person.call(obj, 'person1')
+
+obj.say()//my name is person1
+
+var person2 = new Person('person2')
+var person3 = new Person('person3')
+
+console.log(person2.say === person3.say) // true
+console.log(person2.run === person3.run) // false
+```
+js new一个对象的原理差不多和上面的代码一样吧
+
+首先是得有一个构造函数，然后声明一个对象，让这个对象的 **\_\_proto\_\_** 指向构造函数的 **prototype**，接着借助call执行构造函数中的代码为这个新对象添加属性和方法，这个对象就实现了继承了
+
+个人理解 如果一个构造函数没有显式指定 **prototype** 那么这个对象其实不用将 **\_\_proto\_\_** 指向构造函数的 **prototype**，因为单纯的用call就可以给这个对象添加构造函数里面的属性和方法了。当然构造函数
+里的一些属性或者方法直接写在函数里面或者写在它的原型对象(prototype)都可以，二者也是有差别的，正如上面的代码，直接写在函数里面实际上是把这个属性复制了一份给子对象。每个子对象的该属性都是独立的(如 **run** 方法)，而写在原型对象里面则是所有子对象共享一份(如 **say** 方法)
+
+## 借用构造函数
+
+
+
 
 
