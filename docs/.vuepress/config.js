@@ -17,7 +17,8 @@ module.exports = {
       ],
       '/javaScript/': [
         '',
-        'PROPTYPE'
+        'TALKABOUT',
+        'PROTOTYPE',
       ],
       // '/css/': [
       //   'three',
