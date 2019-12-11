@@ -22,7 +22,13 @@ module.exports = {
         '',
         'TALKABOUT',
         'PROTOTYPE',
+        '模块化'
       ],
+      '/dataStructureAndAlgorithm/': [
+        '',
+        'DATASTRUCT',
+
+      ]
       // '/css/': [
       //   'three',
       //   'four'

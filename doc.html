@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+
+<style type="text/css">
+    body {
+        margin: 0;
+        color: rgba(0, 0, 0, 0.65);
+        font-size: 14px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        font-variant: tabular-nums;
+        line-height: 1.5;
+        background-color: #fff;
+        font-feature-settings: 'tnum';
+    }
+
+    .ant-layout {
+        display: flex;
+        flex: auto;
+        flex-direction: column;
+        /* fix firefox can't set height smaller than content on flex item */
+        min-height: 0;
+        background: #f0f2f5;
+    }
+
+    .ant-layout,
+    .ant-layout * {
+        box-sizing: border-box;
+    }
+
+    .ant-layout.ant-layout-has-sider {
+        flex-direction: row;
+    }
+
+    .ant-layout.ant-layout-has-sider>.ant-layout,
+    .ant-layout.ant-layout-has-sider>.ant-layout-content {
+        overflow-x: hidden;
+    }
+
+    .ant-layout-header,
+    .ant-layout-footer {
+        flex: 0 0 auto;
+    }
+
+    .ant-layout-header {
+        height: 64px;
+        padding: 0 50px;
+        line-height: 64px;
+        background: #001529;
+    }
+
+    .ant-layout-footer {
+        padding: 24px 50px;
+        color: rgba(0, 0, 0, 0.65);
+        font-size: 14px;
+        background: #f0f2f5;
+    }
+
+    .ant-layout-content {
+        flex: auto;
+        /* fix firefox can't set height smaller than content on flex item */
+        min-height: 0;
+    }
+
+    .ant-layout-sider {
+        position: relative;
+        /* fix firefox can't set width smaller than content on flex item */
+        min-width: 0;
+        background: #001529;
+        transition: all 0.2s;
+    }
+
+    .ant-layout-sider-children {
+        height: 100%;
+        margin-top: -0.1px;
+        padding-top: 0.1px;
+    }
+
+    .ant-layout-sider-has-trigger {
+        padding-bottom: 48px;
+    }
+
+    .ant-layout-sider-right {
+        order: 1;
+    }
+
+    .ant-layout-sider-trigger {
+        position: fixed;
+        bottom: 0;
+        z-index: 1;
+        height: 48px;
+        color: #fff;
+        line-height: 48px;
+        text-align: center;
+        background: #002140;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .ant-layout-sider-zero-width>* {
+        overflow: hidden;
+    }
+
+    .ant-layout-sider-zero-width-trigger {
+        position: absolute;
+        top: 64px;
+        right: -36px;
+        width: 36px;
+        height: 42px;
+        color: #fff;
+        font-size: 18px;
+        line-height: 42px;
+        text-align: center;
+        background: #001529;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .ant-layout-sider-zero-width-trigger:hover {
+        background: #192c3e;
+    }
+
+    .ant-layout-sider-zero-width-trigger-right {
+        left: -36px;
+    }
+
+    .ant-layout-sider-light {
+        background: #fff;
+    }
+
+    .ant-layout-sider-light .ant-layout-sider-trigger {
+        color: rgba(0, 0, 0, 0.65);
+        background: #fff;
+    }
+
+    .ant-layout-sider-light .ant-layout-sider-zero-width-trigger {
+        color: rgba(0, 0, 0, 0.65);
+        background: #fff;
+    }
+
+    .tableInfo {
+        background-color: white;
+        margin-bottom: 20px;
+    }
+
+    .tableInfo .tableHeader {
+        position: relative;
+        height: 50px;
+        line-height: 50px;
+        padding: 0 20px;
+        background-color: #efefef;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        color: black;
+        font-size: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .tableInfo .tableHeader .tableHeaderLeft {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .tableInfo .tableHeader .tableHeaderRight {
+        cursor: pointer;
+    }
+
+    .tableInfo .tableHeader .tableHeaderRight:hover {
+        color: red;
+    }
+
+    .tableInfo .tableContent {
+        padding: 10px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .adjustEnd {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .adjustEnd .tableInfo {
+        border: 1px solid #62a51a;
+        margin: 10px;
+        position: relative;
+        display: inline-flex;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .adjustEnd .tableInfo .feng {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .adjustEnd .tableInfo .feng .oneLeft {
+        display: inline-flex;
+        width: 320px;
+        border-right: 1px solid #62a51a;
+        align-items: center;
+        min-height: 150px;
+        max-height: 210px;
+        height: 100%;
+        justify-content: center;
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .feng .oneRight {
+        flex: 3 1;
+        display: inline-flex;
+        flex-direction: column;
+        min-height: 130px;
+        max-height: 190px;
+        height: 100%;
+        padding: 10px;
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .feng .oneRight span {
+        margin-right: 10px;
+    }
+
+    .adjustEnd .tableInfo .feng .oneRight p {
+        margin: 0;
+    }
+
+    .adjustEnd .tableInfo .avatar {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 151px;
+        background-color: white;
+        border-left: 1px solid #62a51a;
+        border-bottom: 1px solid #62a51a;
+        padding: 10px 20px;
+    }
+
+    .adjustEnd .tableInfo .fourlines {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .adjustEnd .tableInfo .fourlines .oneLeft {
+        display: inline-flex;
+        width: 300px;
+        border-right: 1px solid #62a51a;
+        align-items: center;
+        height: 168px;
+        justify-content: center;
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .fourlines .oneRight {
+        flex: 3 1;
+        display: inline-flex;
+        flex-direction: column;
+        height: 100%;
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .fourlines .oneRight>div {
+        display: flex;
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .fourlines .oneRight>div>span {
+        display: flex;
+        padding: 10px;
+    }
+
+    .adjustEnd .tableInfo .fourlines .oneRight>div>span:first-child {
+        width: 45%;
+        border-right: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .fourlines .oneRight>div:last-child {
+        border-bottom: 0;
+    }
+
+    .adjustEnd .tableInfo .topOne {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .adjustEnd .tableInfo .topOne .oneLeft {
+        display: inline-flex;
+        width: 300px;
+        border-right: 1px solid #62a51a;
+        align-items: center;
+        height: 84px;
+        justify-content: center;
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .topOne .oneRight {
+        flex: 3 1;
+        display: inline-flex;
+        flex-direction: column;
+        height: 100%;
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .topOne .oneRight>div {
+        display: flex;
+    }
+
+    .adjustEnd .tableInfo .topOne .oneRight>div>span {
+        display: flex;
+        padding: 10px;
+    }
+
+    .adjustEnd .tableInfo .topOne .oneRight>div>span>em {
+        display: inline-block;
+        padding-left: 10px;
+        font-style: normal;
+    }
+
+    .adjustEnd .tableInfo .topOne .oneRight>div>span:first-child {
+        width: 45%;
+        border-right: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .topOne .oneRight>div:first-child {
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .topTwo {
+        display: inline-flex;
+        flex-direction: row;
+        width: 100%;
+        height: 42px;
+        border-bottom: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .topTwo span {
+        display: inline-flex;
+        padding: 0 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .adjustEnd .tableInfo .topTwo span:first-child {
+        width: 300px;
+        height: 42px;
+        border-right: 1px solid #62a51a;
+    }
+
+    .adjustEnd .tableInfo .signal {
+        width: 97.4%;
+        display: inline-flex;
+        border-bottom: 1px solid #62a51a;
+        padding: 20px;
+        justify-content: space-between;
+        flex-direction: row;
+    }
+
+    .adjustEnd .tableInfo .signal .dateinfo {
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    .adjustEnd .tableInfo .signal .dateinfo>div {
+        display: inline-flex;
+        flex-direction: row;
+    }
+
+    .adjustEnd .tableInfo .signal .dateinfo>div span {
+        display: inline-flex;
+    }
+
+    .adjustEnd .tableInfo .signal .dateinfo>div span.names {
+        border-bottom: 1px solid black;
+        min-width: 100px;
+    }
+
+    .adjustEnd .btns {
+        padding: 15px;
+        width: 100%;
+        text-align: center;
+    }
+</style>
+<style>
+
+</style>
+
+<body>
+    <main class="ant-layout-content"
+        style="background: rgb(255, 255, 255); padding: 24px; margin: 0px; min-height: 280px; border-radius: 10px;">
+        <div>
+            <div>
+                <div>
+                    <div class="tableInfo">
+                        <div class=" tableHeader">
+                            <div class=" tableHeaderLeft" style="width: 100%;">
+                                <div>评估结果</div>
+                                <div class=" tableHeaderRight" style="display: none;"><i aria-label="图标: right"
+                                        class="anticon anticon-right" style="font-size: 20px;"><svg
+                                            viewBox="64 64 896 896" class="" data-icon="right" width="1em" height="1em"
+                                            fill="currentColor" aria-hidden="true" focusable="false"
+                                            style="transform: rotate(90deg);">
+                                            <path
+                                                d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z">
+                                            </path>
+                                        </svg></i></div>
+                            </div>
+                            <div></div>
+                        </div>
+                        <div class=" tableContent" style="display: block;">
+                            <div class=" adjustEnd">
+                                <div class=" tableInfo">
+                                    <div class=" topTwo "><span>评估编号</span><span>258008</span></div>
+                                    <div class=" topTwo "><span>评估原因</span><span>接受服务后的常规评估</span></div>
+                                    <div class=" topTwo "><span>评估日期</span><span>2019-12-05</span></div>
+                                    <div class=" topTwo "><span>姓名</span><span>照护</span></div>
+                                    <div class=" topTwo "><span>性别</span><span>男</span></div>
+                                    <div class=" topTwo "><span>出生日期</span><span>1960-01-01</span></div>
+                                    <div class=" topTwo "><span>评估机构</span><span>杭州再启</span></div>
+                                    <div class=" topTwo "><span>执行评估员</span><span>院长</span></div>
+                                    <div class=" avatar"><img
+                                            src="data:image/png;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAAA/AAD/4QNvaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjMtYzAxMSA2Ni4xNDU2NjEsIDIwMTIvMDIvMDYtMTQ6NTY6MjcgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MDYzRjg4QjNEM0M2RTQxMThGQ0NFOUEyNTE5MUEyQkMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjZDQURDREFDNkUzMTFFNDk0RENBQTRENTM0RjEyRDMiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjZDQURDRDlDNkUzMTFFNDk0RENBQTRENTM0RjEyRDMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowNjNGODhCM0QzQzZFNDExOEZDQ0U5QTI1MTkxQTJCQyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowNjNGODhCM0QzQzZFNDExOEZDQ0U5QTI1MTkxQTJCQyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6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"
+                                            alt="" style="height: 120px; width: 90px; margin-top: 14px;"></div>
+                                    <div class=" feng">
+                                        <div class=" oneLeft">一级指标分级</div>
+                                        <div class=" oneRight"><span>Barthel指数: 轻度受损 </span><span>感知觉与沟通:
+                                                中度受损 </span><span>精神状态: 轻度受损 </span><span>时间/空间、人物定向和社会交往: 能力完好
+                                            </span><span>压疮风险: 无危险 </span></div>
+                                    </div>
+                                    <div class=" feng">
+                                        <div class=" oneLeft">评估详情</div>
+                                        <div class=" oneRight">
+                                            <div><span>A.1.1: 10 分</span><span>A.1.2: 10 分</span><span>A.1.3: 5
+                                                    分</span><span>A.1.4: 5 分</span><span>A.1.5: 5 分</span><span>A.1.6: 5
+                                                    分</span><span>A.1.7: 5 分</span><span>A.1.8: 5 分</span><span>A.1.9: 5
+                                                    分</span><span>A.1.10: 10 分</span></div>
+                                            <div><span>B.1.1: 1 分</span><span>B.1.2: 3 分</span><span>B.1.3: 1
+                                                    分</span><span>B.1.4: 0 分</span></div>
+                                            <div><span>C.1.1: 1 分</span><span>C.1.2: 0 分</span><span>C.1.3: 0 分</span>
+                                            </div>
+                                            <div><span>D.1.1: 1 分</span><span>D.1.2: 0 分</span><span>D.1.3: 0 分</span>
+                                            </div>
+                                            <div><span>E.1.1: 2 分</span><span>E.1.2: 2 分</span><span>E.1.3: 3
+                                                    分</span><span>E.1.4: 2 分</span><span>E.1.5: 1 分</span><span>E.1.6: 1
+                                                    分</span></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class=" topTwo "><span>老年人护理等级</span><span>一级护理</span></div>
+                                    </div>
+                                    <div class=" feng">
+                                        <div class=" oneLeft" style="height: 210px;">护理规范</div>
+                                        <div class=" oneRight" style="height: 210px;">
+                                            <p>每天巡视房间至少 3 次，及时了解老人的身心变化，为老年人提供咨询、指导服务；</p>
+                                            <p>提供合适辅具，尽量协助老人自行做好个人卫生，帮助洗澡、洗头，定期修剪指（趾）甲，做
+                                                好环境卫生，保持老人及室内环境整洁；</p>
+                                            <p>老年人情况每 1 周记录 1 次，有变化随时记录；</p>
+                                            <p>提供送餐服务，尽量协助到餐厅就餐；</p>
+                                            <p>协助服药，协助就医，根据老人情况指导康复护理，指导助行辅具使用。</p>
+                                        </div>
+                                    </div>
+                                    <div class=" signal">
+                                        <div class=" dateinfo">
+                                            <div><span>执行评估员签名：</span><span class=" names"></span></div>
+                                            <div><span class=" names "></span><span>年</span><span
+                                                    class=" names "></span><span>月</span><span
+                                                    class=" names "></span><span>日</span></div>
+                                        </div>
+                                    </div>
+                                    <div class=" signal ">
+                                        <div></div>
+                                        <div class=" dateinfo ">
+                                            <div><span>家属签名：</span><span class=" names "></span></div>
+                                            <div><span class=" names "></span><span>年</span><span
+                                                    class=" names "></span><span>月</span><span
+                                                    class=" names "></span><span>日</span></div>
+                                        </div>
+                                    </div>
+                                    <div class=" signal ">
+                                        <div>医嘱信息：</div>
+                                        <div class=" dateinfo ">
+                                            <div><span>医师签名：</span><span class=" names "></span></div>
+                                            <div><span class=" names "></span><span>年</span><span
+                                                    class=" names "></span><span>月</span><span
+                                                    class=" names "></span><span>日</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding: 10px;">
+                                    <p> 基本服务规范：</p>
+                                    <p>1.每天清扫房间 1 次，早晚通风，保持环境清洁，空气清新，无异味；室内无蝇、无蚊、无鼠、
+                                        无障螂、无臭虫、无蛛网。</p>
+                                    <p>2.保持老年人身体清洁，衣着整洁得体，定期理发（费用自理）。</p>
+                                    <p>3.保持床单位整洁，定期清洗床单、被套、枕套，夏天使用凉席者每天擦拭清洁。</p>
+                                    <p>4.每天定时送开水 2 次，提供一周膳食食谱，开展营养指导。</p>
+                                    <p>5.护理人员 24 小时值班，提供床头呼叫服务。</p>
+                                    <p>6.为老年人提供文化、娱乐、体育活动及各种兴趣活动等场所，定期组织老年人参与各类活动；
+                                        同时，建立一定的激励机制，发挥老年人的主观能动性，促进老年人积极参与或者协助老年人自行组织
+                                        各类娱乐、健身、兴趣活动，营造积极乐观的生活氛围，增进心身健康。有条件的机构可组织老年人开
+                                        展可持续的互助服务。</p>
+                                    <p>7.教育、督促、协助老人经常户外活动，或者于阳台、露台等处，接受阳光照射。</p>
+                                    <p>8.每天巡视老人房间，沟通交流，发现身心健康问题，及时处理异常情况。</p>
+                                    <p>9.建立老年人入住评估、定期评估制度，至少一年全面评估一次，期间根据老年人能力变化，结
+                                        合分级护理标准，随时调整护理级别。</p>
+                                    <p>10.根据老年人评估结果，制订合适的照护计划并定期总结、调整。</p>
+                                    <p>11.根据老年人情况提供合适的医疗护理和康复护理服务，建立良好的就医渠道。</p>
+                                    <p>12.建立老年人健康档案，定期记录老年人情况，有变化随时记录。开展老年人健康教育活动每月
+                                        至少 2 次，采取多种形式对老年人跌倒、噎食、心脑血管意外等常见意外事件预防和应急处理等进行科
+                                        普教育。</p>
+                                    <p>13.建立信息交流渠道，接受反馈信息，及时处理各类问题。</p>
+                                    <p>14.建立并严格执行老年人外出请假登记制度，与老人及监护人签订相关协议，明确责任，二级护
+                                        理以上老人不单独外出。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
