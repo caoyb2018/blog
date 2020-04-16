@@ -1,7 +1,7 @@
 # 概念入门
 
 ## reacr.createElement
-```
+``` js
 render() {
     return (
         <div className={danger}>
@@ -11,7 +11,7 @@ render() {
 }
 ```
 如上是一段最简单的react代码，也是最简单的jsx语法，实际上这段代码会编译成这样一种形式的对象
-```
+``` js
     type: 'div',
     {
       className: 'danger'
@@ -23,7 +23,7 @@ render() {
 jsx会将html语法直接加入到js，再由翻译器转换成春js后由浏览器执行。React官方之前开发过一套轮子JSTransform来完成这个工作。但是现在已经全部用Babel的jsx编译器来实现了，而JSTransform这个轮子已经不再维护。
 
 而Babel将jsx语法编译成这个形式后会将这个结果作为参数传递给React.createElement方法,react.CreateElement方法源码如下(加了一些注释)
-```
+``` js
 export function createElement(type, config, children) {
   let propName;
 
@@ -125,7 +125,7 @@ createElement所做的事情如下
 3、处理默认值
 
 经过上述处理后会得到几个值type、key等这些值等含义应该不难理解,得到这几个值后会把这些值作为参数传递给 ReactElement方法，这个世纪上也只是一个工厂函数，源码如下
-```
+``` js
 const ReactElement = function (type, key, ref, self, source, owner, props) {
   const element = {
     // This tag allows us to uniquely identify this as a React Element

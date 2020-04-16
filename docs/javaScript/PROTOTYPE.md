@@ -9,7 +9,7 @@
 其实js的原型和原型链主要就是 **\_\_proto\_\_** 和 **prototype**
 
 **\_\_proto\_\_** 且称之为原型链 **prototype**且称之为原型对象
-```
+``` js
 function Person(name) {
     this.name = name;
 }
@@ -62,7 +62,7 @@ Person其实也只是一个函数，那么它肯定是JS数据类型**Function**
 
 从这张图中最终得到的结果如下
 
-```
+``` js
 Object.prototype.__proto__ === null;
 Object.__proto__.__proto__ === Object.prototype;
 Function.__proto__ === Function.prototype === Object.__proto__;
@@ -77,7 +77,7 @@ String.__proto__ === Number.__proto__ === Boolean.__proto__ === Array.__proto__ 
 
 换句话说。如果没有new，js要怎样才能实现继承呢
 
-```
+``` js
 function Person(name) {
     this.name = name;
     this.run = function(){

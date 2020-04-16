@@ -7,7 +7,7 @@
 
 
 代码实现
-```
+``` js
 class Stack {
 
     constructor() {
@@ -59,7 +59,7 @@ module.exports=Stack
 好比日常生活中的排队，先到的人站在队伍前面，后来的人在队伍后面。队伍前面的人先走。
 
 代码实现
-```
+``` js
 class Queue {
 	constructor(items) {
         this.items = items || []
@@ -102,7 +102,7 @@ module.exports = Queue
 实现优先队列的方法：在元素插入队列的时候需要给定该元素的优先级。遍历当前队列找到第一个优先级低于待插入的元素下标，然后将待插入元素插入到该元素前面即可。
 
 代码实现(优先队列继承普通队列，普通队列的实现方式见上文)
-```
+``` js
 const Queue = require('./Queue');
 
 class PriorityQueue extends Queue{
@@ -137,7 +137,7 @@ module.exports = PriorityQueue
 当然链表也存在缺点。在数组中随时可以通过下标的形式访问一个元素比如 __arr[1]__ 而链表无法做到，在链表中查找一个元素的时候必须从链表的第一个元素开始向后遍历查找到该元素才行
 
 代码实现
-```
+``` js
 class Node {
 	constructor(element) {
 		this.element = element;
