@@ -1,9 +1,17 @@
-class PhoneFactory {
-    createOS(){
-        throw new Error('不允许直接调用')
+var createDiv = (function(){
+    var instance = null;
+    createDiv = function(html){
+        if(!instance) {
+            this.html = html;
+            this.init();
+            instance = this;
+        }
+        return instance;
     }
-
-    createHardWare() {
-        throw new Error('不允许直接调用')
+    createDiv.prototype.init = function(){
+        var div = document.createElement('div');
+        div.innerHTML = this.html;
+        document.body.appendChild(div);
     }
-}
+    return createDiv;
+})()

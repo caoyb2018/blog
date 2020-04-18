@@ -9,9 +9,9 @@ module.exports = {
       { text: 'Home', link: '/' },
       { text: 'react源码解析', link: '/react源码解析/' },
       { text: 'javaScript', link: '/javaScript/' },
-      { text: '数据结构与算法', link: '/dataStructureAndAlgorithm/'},
-      { text: '设计模式', link: '/DesignPattern/' },
-      { text: '前端性能优化', link: '/performanceOptimization/' }
+      { text: '数据结构与算法', link: '/数据结构与算法/'},
+      { text: '设计模式', link: '/设计模式/' },
+      { text: '前端性能优化', link: '/前端性能优化/' }
     ],
     sidebar: {
       '/react源码解析/': [
@@ -24,15 +24,20 @@ module.exports = {
         'PROTOTYPE',
         '模块化'
       ],
-      '/dataStructureAndAlgorithm/': [
+      '/数据结构与算法/': [
         '',
-        'DATASTRUCT',
+        '数据结构',
 
+      ],
+      '/设计模式/': [
+        '',
+        '单例模式',
+        '策略模式',
+        '代理模式'
+      ],
+      '/前端性能优化/': [
+        '',
       ]
-      // '/css/': [
-      //   'three',
-      //   'four'
-      // ]
     }
   },
 }
