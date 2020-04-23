@@ -1,23 +1,5 @@
-class Stack {
-    constructor(){
-        this.items = []
-    }
+import React from 'react';
 
-    push(element) {
-        this.items.push(element)
-    }
-
-    pop() {
-        return this.items.pop()
-    }
-
-    peek() {
-        return this.items[this.items.length-1]
-    }
-
-    isEmpty() {
-        return this.items.length === 0
-    }
-
-    
+export default class Hello extends React.Component {
+    ...
 }

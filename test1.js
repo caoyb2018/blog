@@ -306,9 +306,190 @@ for(var i=0, c; c=checkbox[ i++ ];){
 // proxyPlus(1,2,3,4)
 
 //迭代器模式代码
+// $.each([1,2,3,4], function(i,n){
+//     console.log(`下标${i}`)
+//     console.log(`值${n}`)
+// })
 
-[1,2,3,4].map((item, index)=>{
-    console.log(`下标${index}`)
-    console.log(`值${item}`)
+// var each = function(arr, callback) {
+//     for(let i=0; i< arr.length; i++) {
+//         callback(i, arr[i])
+//     }
+// }
+
+// var compare = function(arr1, arr2) {
+//     if(arr1.length !== arr2.length) {
+//         return false
+//     }
+//     each(arr1, (index, item)=>{
+//         if(item !== arr2[indedx]){
+//             return false
+//         }
+//     })
+//     return true
+// }
+
+// var Iterator= function( arr ) {
+//     var current = 0;
+//     var next = function(){
+//         current = current+1
+//     }
+//     var isDone = function(){
+//         return current >= arr.length;
+//     }
+//     var getCurrent = function(){
+//         return arr[current]
+//     }
+//     return {
+//         next,
+//         isDone,
+//         getCurrent,
+//         length: arr.length
+//     }
+// }
+
+// var compare = function(arr1, arr2) {
+//     var iterator1 = Iterator(arr1)
+//     var iterator2 = Iterator(arr2)
+//     if(arr1.length !== arr2.length) {
+//         return false
+//     }
+//     while(!iterator1.isDone() && !iterator2.isDone()){
+//         if(iterator1.getCurrent() !== iterator2.getCurrent()){
+//             return false;
+//         }
+//         iterator2.next();
+//         iterator2.next();
+//     }
+//     return true
+// }
+
+//发布-订阅模式代码
+
+document.body.addEventListener('click', function(){
+    console.log(1)
+}, false)
+
+document.body.click()
+
+var salesoffices = {} 
+
+salesoffices.clientList = [] 
+
+salesoffices.listen = function(fn){
+    this.clientList.push(fn)
+}
+
+salesoffices.trigger = function(){
+    for(var i=0; i<this.clientList.length; i++) {
+        fn = this.clientList[i]
+        fn.apply(this, arguments)
+    }
+}
+
+salesoffices.listen(function(price, squareMeter){//客户1订阅
+    console.log(`价格${price},面积${squareMeter}`)
 })
 
+salesoffices.listen(function(price, squareMeter){//客户2订阅
+    console.log(`价格${price},面积${squareMeter}`)
+})
+
+salesoffices.trigger(20000, 88) //发布消息
+salesoffices.trigger(30000, 110) //发布消息
+
+var salesoffices = {} 
+
+salesoffices.clientList = {}
+
+salesoffices.listen = function(key, fn){
+    if(!this.clientList[key]) {
+        this.clientList[key] =[]
+    }
+    this.clientList[key].push(fn)
+}
+
+salesoffices.trigger = function(){
+    var key = Array.prototype.shift.call(arguments)
+    var fns = this.clientList[key]
+    if(!fns || fns.length === 0) {
+        return
+    }
+    for(var i=0; i<fns.length; i++) {
+        fn = fns[i]
+        fn.apply(this, arguments)
+    }
+}
+
+salesoffices.listen('squareMeter88', function(price){//客户1订阅
+    console.log(`客户一收到消息:价格${price}`)
+})
+
+salesoffices.listen('squareMeter110',function(price){//客户2订阅
+    console.log(`客户二收到消息：价格${price}`)
+})
+
+salesoffices.trigger('squareMeter88', 20000) //发布消息
+salesoffices.trigger('squareMeter110', 30000) //发布消息
+
+var event ={
+    clientList: {},
+    listen: function(key, fn){
+        if(!this.clientList[key]){
+            this.clientList[key] = []
+        }
+        this.clientList.push(fn)
+    },
+    trigger: function(){
+        var key = Array.prototype.shift.call(arguments)
+        var fns = this.clientList[key]
+        if(!fns || fns.length === 0) {
+            return
+        }
+        for(let i=0; i<fn.length; i++) {
+            fns[i].apply(this, arguments)
+        }
+    }
+}
+
+var installEvent = function(obj) {
+    for(var i in event) {
+        obj[i] = event[i]
+    }
+}
+
+var salesoffices = {}
+installEvent(salesoffices)
+salesoffices.listen('squareMeter88', function(price){//客户1订阅
+    console.log(`客户一收到消息:价格${price}`)
+})
+
+salesoffices.listen('squareMeter110',function(price){//客户2订阅
+    console.log(`客户二收到消息：价格${price}`)
+})
+
+salesoffices.trigger('squareMeter88', 20000) //发布消息
+salesoffices.trigger('squareMeter110', 30000) //发布消息
+
+event.remove = function(key ,fn){
+    var fns = this.clientList[key]
+    if(!fns) {
+        return
+    }
+    if(!fn) { // 没有具体的回调函数则删除所有key对应的回调函数
+        fns = []
+    }else {
+        for(let i= fns.length-1; i>=0; i--){
+            var _fn = fns[i]
+            if(_fn === fn) {
+                fns.splice(i, 1)
+            }
+        }
+    }
+}
+
+salesoffices.listen('squareMeter88', fn1 = function(price){//客户1订阅
+    console.log(`客户一收到消息:价格${price}`)
+})
+
+salesoffices.remove('squareMeter88')

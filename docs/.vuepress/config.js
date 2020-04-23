@@ -16,13 +16,17 @@ module.exports = {
     sidebar: {
       '/react源码解析/': [
         '',
-        'react暴漏的api'
+        'react暴漏的api',
+        'react-dom中创建的一系列玩意',
+        '一系列时间和update'
       ],
       '/javaScript/': [
         '',
         'TALKABOUT',
         'PROTOTYPE',
-        '模块化'
+        '模块化',
+        '作用域和闭包',
+        'this和对象原型'
       ],
       '/数据结构与算法/': [
         '',
@@ -34,10 +38,12 @@ module.exports = {
         '单例模式',
         '策略模式',
         '代理模式',
-        '迭代器模式'
+        '迭代器模式',
+        '发布-订阅模式'
       ],
       '/前端性能优化/': [
         '',
+        '数据存储'
       ]
     }
   },
