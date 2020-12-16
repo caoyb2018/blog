@@ -11,7 +11,8 @@ module.exports = {
       { text: 'javaScript', link: '/javaScript/' },
       { text: '数据结构与算法', link: '/数据结构与算法/'},
       { text: '设计模式', link: '/设计模式/' },
-      { text: '前端性能优化', link: '/前端性能优化/' }
+      { text: '前端性能优化', link: '/前端性能优化/' },
+      { text: '一个很闷骚的网站', link: 'http://daily.cybqd.com' }
     ],
     sidebar: {
       '/react源码解析/': [
