@@ -53,30 +53,29 @@ const React = {
 };
 ```
 
-## react.createElement
-react.createElement可以说是react里面我们用到的最多的一个api了虽然我们并没有这种感觉，但实际上每次写jsx语法我们都会用到这个方法
+## jsx到javaScript的转换
 ``` js
-render() {
-    return (
-        <div className={danger}>
-            1111
-        </div >
-    )
+function Comp = () => {
+  return ...
 }
+<div className={danger} key='1'>
+  1111
+  <span>2222</span>
+</div >
+}
+<Comp />
 ```
-如上是一段最简单的react代码，也是最简单的jsx语法，实际上这段代码会编译成这样一种形式的对象
+在react中使用jsx语法的时候会用Babel的jsx编译器转成react.createElement方法，参数就是这个对象
 ``` js
-    type: 'div',
-    {
-      className: 'danger'
-    },
-    children: [
-        '111'
-    ]
+  react.createElement('div',
+    {className: 'danger', key: '1'}
+   '111', 
+   react.createElement('span', null, '2222')),
+  )
+  react.createElement(Comp, null)
 ```
-jsx会将html语法直接加入到js，再由翻译器转换成春js后由浏览器执行。React官方之前开发过一套轮子JSTransform来完成这个工作。但是现在已经全部用Babel的jsx编译器来实现了，而JSTransform这个轮子已经不再维护。
-
-而Babel将jsx语法编译成这个形式后会将这个结果作为参数传递给React.createElement方法,react.CreateElement方法源码如下(加了一些注释)
+react根据组件首字母是否大些来判断当前组件是原生组件或者自定义组件，传参方式不同。原生组件为字符串，自定义组件为一个变量
+## react.createElement
 ``` js
 export function createElement(type, config, children) {
   let propName;
@@ -117,7 +116,7 @@ export function createElement(type, config, children) {
 
   // Children can be more than one argument, and those are transferred onto
   // the newly allocated props object.
-  // 处理 children 的几个操作，很简单
+  // 处理 children 的几个操作
   const childrenLength = arguments.length - 2;
   if (childrenLength === 1) {
     props.children = children;
@@ -125,11 +124,6 @@ export function createElement(type, config, children) {
     const childArray = Array(childrenLength);
     for (let i = 0; i < childrenLength; i++) {
       childArray[i] = arguments[i + 2];
-    }
-    if (__DEV__) {
-      if (Object.freeze) {
-        Object.freeze(childArray);
-      }
     }
     props.children = childArray;
   }
@@ -142,20 +136,6 @@ export function createElement(type, config, children) {
     for (propName in defaultProps) {
       if (props[propName] === undefined) {
         props[propName] = defaultProps[propName];
-      }
-    }
-  }
-  if (__DEV__) {
-    if (key || ref) {
-      const displayName =
-        typeof type === 'function'
-          ? type.displayName || type.name || 'Unknown'
-          : type;
-      if (key) {
-        defineKeyPropWarningGetter(props, displayName);
-      }
-      if (ref) {
-        defineRefPropWarningGetter(props, displayName);
       }
     }
   }
@@ -178,7 +158,7 @@ createElement所做的事情如下
 
 3、处理默认值
 
-经过上述处理后会得到几个值type、key等这些值等含义应该不难理解,得到这几个值后会把这些值作为参数传递给 ReactElement方法，这个世纪上也只是一个工厂函数，源码如下
+经过上述处理后会得到几个值type、key等这些值,得到这几个值后会把这些值作为参数传递给 ReactElement方法，这个实际上也只是一个工厂函数
 ``` js
 const ReactElement = function (type, key, ref, self, source, owner, props) {
   const element = {
@@ -195,56 +175,10 @@ const ReactElement = function (type, key, ref, self, source, owner, props) {
     _owner: owner,
   };
 
-  if (__DEV__) {
-    // The validation flag is currently mutative. We put it on
-    // an external backing store so that we can freeze the whole object.
-    // This can be replaced with a WeakMap once they are implemented in
-    // commonly used development environments.
-    element._store = {};
-
-    // To make comparing ReactElements easier for testing purposes, we make
-    // the validation flag non-enumerable (where possible, which should
-    // include every environment we run tests in), so the test framework
-    // ignores it.
-
-    //为了使ReactElement的比较更容易进行测试，我们使
-    //验证标志不可枚举（在可能的情况下，应
-    //包括我们在其中运行测试的所有环境），因此测试框架
-    //忽略它。
-    Object.defineProperty(element._store, 'validated', {
-      configurable: false,
-      enumerable: false,
-      writable: true,
-      value: false,
-    });
-    // self and source are DEV only properties.
-    Object.defineProperty(element, '_self', {
-      configurable: false,
-      enumerable: false,
-      writable: false,
-      value: self,
-    });
-    // Two elements created in two different places should be considered
-    // equal for testing purposes and therefore we hide it from enumeration.
-    //应该考虑在两个不同位置创建的两个元素
-    //出于测试目的是相等的，因此我们将其从枚举中隐藏起来。
-    Object.defineProperty(element, '_source', {
-      configurable: false,
-      enumerable: false,
-      writable: false,
-      value: source,
-    });
-    if (Object.freeze) {
-      Object.freeze(element.props);
-      Object.freeze(element);
-    }
-  }
-
   return element;
 };
 ```
-只是返回了一个element对象，至于if (__DEV__)中等代码其实可以忽略可以理解为为了防止开发人员对element对象做一些不规范或者可能导致错误的操作。
-分析下来，react.createElement只是根据jsx语法编译后产生的参数返回了一个element对象
+只是返回了一个element对象。。。
 
 ## Componmrnt PureComponment
 ``` js
@@ -254,7 +188,7 @@ export default class Hello extends React.Component {
     ...
 }
 ```
-对于react开发者，Componment这个玩意一定不会陌生因为我们写React组件的时候一定会继承这个玩意
+react写类组件的时候一定会继承React.Component。这里面有setState, compomentDidMount等一系列方法
 ``` js
 
 const emptyObject = {};
@@ -287,9 +221,9 @@ Component.prototype.forceUpdate = function(callback) {
   this.updater.enqueueForceUpdate(this, callback, 'forceUpdate');
 };
 ```
-Componment核心代码差不多就这么多。真的是非常简单。重点就是updater这个属性了。无论是setState或者forceUpdate这种可能会导致组件重新render的方法都是通过this.updater来完成的
+Component代码只有这么多。除了props、context这些常见的参数之外，还要一个updater。后续setState,forceUpdate会依赖这个updater。
 
-至于Purecomponment在开发中使用的频率会比Component少很多具体参考[React文档](https://zh-hans.reactjs.org/docs/react-api.html#reactpurecomponent)
+Purecomponment具体参考[React文档](https://zh-hans.reactjs.org/docs/react-api.html#reactpurecomponent)
 
 PureComponment不需要我们去手动实现shouldComponmentUpdate更新state和props时会自动做一次浅比较判断是否重新render但是仅仅只是做了一次浅比较如果修改的是数组或者对象的时候可能会出现一些问题，比如值已经发生改变但是页面并没有做出响应。
 ``` js
@@ -322,7 +256,7 @@ react.createRef
 
 上面的三种用法，其中第一种用法已经不推荐甚至快要被废弃了。
 
-react.createRef其实是一个超级简单的方法
+react.createRef
 ``` js
 export function createRef(): RefObject {
   const refObject = {
@@ -334,7 +268,7 @@ export function createRef(): RefObject {
   return refObject;
 }
 ```
-就是返回了一个对象，对象的结构很清晰了。当使用<div ref={this.ref} />来绑定ref会给current这个对象赋值一个对象。通过操作current来操作这个组件。
+就是返回了一个对象。当使用<div ref={this.ref} />来绑定ref会给current这个对象赋值一个对象。通过操作current来操作这个组件。
 
 ## React.forwardRef
 
