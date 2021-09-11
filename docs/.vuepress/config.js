@@ -20,7 +20,8 @@ module.exports = {
         '前置理念',
         'jsx和react.createElement',
         '创建根节点',
-        '创建Fiber树'
+        '创建Fiber树',
+        'render阶段'
       ],
       '/javaScript/': [
         '',
