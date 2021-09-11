@@ -21,7 +21,9 @@ module.exports = {
         'jsx和react.createElement',
         '创建根节点',
         '创建Fiber树',
-        'render阶段'
+        'render阶段',
+        'diff算法',
+        'commit阶段'
       ],
       '/javaScript/': [
         '',
