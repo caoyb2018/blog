@@ -83,7 +83,7 @@ function completeUnitOfWork(unitOfWork) {
 ```
 大体上的流程是一个深度优先遍历的过程从RootFiber开始执行beginWork然后顺着rootFiber.child一路向下为每一个子节点执行beginWork。当遍历到最后一个子节点时child为null就会为当前节点执行completeWork。completeWork会寻找该节点的兄弟节点，为兄弟节点执行beiginWork。同样也是一路向下，当遍历到最后一个兄弟节点的时候会一路向上寻找parent。为parent执行completeWork
 大致的执行顺序如下
-![](http://47.96.135.132/prcture/9.png)
+![](http://cybccc.com/prcture/9.png)
 ## beginWork
 ```js
 function beginWork(current, workInProgress, renderLanes) {

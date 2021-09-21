@@ -25,11 +25,11 @@ react渲染的时候分为两个阶段，第一阶段称为render、第二阶段
 
 在上面创建根节点末尾会看到已经形成了Fiber树的开始阶段，此时workInPoress(即Fiber双缓存中正在构建或更新的那颗树)还是不存在的。此时会创建workInProgess所对应的方法是createWorkInPoegress。
 
-![](http://47.96.135.132/prcture/3.png)
+![](http://cybccc.com/prcture/3.png)
 
 具体的是如何进入到这个方法的可以调试看代码执行栈。
 
-![](http://47.96.135.132/prcture/4.png)
+![](http://cybccc.com/prcture/4.png)
 ```js
 function createWorkInProgress(current, pendingProps) {
   var workInProgress = current.alternate;
@@ -96,7 +96,7 @@ function createWorkInProgress(current, pendingProps) {
     current.alternate = workInProgress;
 ```
 这两句代码就是将current树和workInProgress相连。此时的Fiber树为
-![](http://47.96.135.132/prcture/5.png)
+![](http://cybccc.com/prcture/5.png)
 
 接着会循环调用performUnitOfwork来为workInProgress添加子节点。performUnitOfwork算是一个比较重要的函数了，日后再说。performUnitOfWork中又调用一系列方法调用reconcileChildren。就是这个方法为workInProgress创建子节点
 ```js
@@ -225,7 +225,7 @@ function reconcileChildren(current, workInProgress, nextChildren, renderLanes) {
 root.current = finishedWork;
 ```
 将FiberRootNode的curreng指向WorkInProgress。至此Fiber树结构为
-![](http://47.96.135.132/prcture/7.png)
+![](http://cybccc.com/prcture/7.png)
 
 ## 创建Fiber树过程(update阶段)
 update阶段和mount阶段所调用的函数差不多。区别在于进入createWorkInProgress方法时。此时worrkInProgress不为null。会进入到else的逻辑
@@ -351,4 +351,4 @@ root.current = finishedWork;
 ```
 最终形成的Fiber树如下
 
-![](http://47.96.135.132/prcture/8.png)
+![](http://cybccc.com/prcture/8.png)
